@@ -29,7 +29,7 @@ d3.csv('netflix_titles.csv').then(raw => {
 function setupChart(svgId) {
     const svg = d3.select(svgId);
     svg.selectAll('*').remove();
-    const margin = { top: 30, right: 20, bottom: 40, left: 60 };
+    const margin = { top: 30, right: 20, bottom: 60, left: 70 };
     const width = +svg.attr("width") - margin.left - margin.right;
     const height = +svg.attr("height") - margin.top - margin.bottom;
     const g = svg.append("g")
@@ -38,47 +38,68 @@ function setupChart(svgId) {
     return { svg, g, margin, width, height };
 }
   
+function addAxisLabels(g, width, height, xLabel, yLabel) {
+    g.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + 40)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "14px")
+        .text(xLabel);
+    g.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", -50)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "14px")
+        .text(yLabel);
+}
+  
 function showContentByYear(data) {
     const { g, width, height } = setupChart('#slide1 svg');
+  
     const dataByYear = d3.rollups(
-        data.filter(d => d.year_added),
-        v => v.length,
-        d => d.year_added
+      data.filter(d => d.year_added),
+      v => v.length,
+      d => d.year_added
     ).sort((a, b) => a[0] - b[0]);
+  
     const years = dataByYear.map(d => d[0]);
     const counts = dataByYear.map(d => d[1]);
+  
     const x = d3.scaleBand().domain(years).range([0, width]).padding(0.15);
     const y = d3.scaleLinear().domain([0, d3.max(counts)]).nice().range([height, 0]);
-
+  
     g.append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 2 === 0)));
-
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 2 === 0)));
+  
     g.append("g").call(d3.axisLeft(y));
-
+  
+    addAxisLabels(g, width, height, "Year", "Number of Titles");
+  
     g.selectAll(".bar")
-        .data(dataByYear)
-        .join("rect")
-        .attr("class", "bar")
-        .attr("x", d => x(d[0]))
-        .attr("y", d => y(d[1]))
-        .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d[1]))
-        .attr("fill", "#b81d24")
-        .on("click", (event, d) => {
+      .data(dataByYear)
+      .join("rect")
+      .attr("class", "bar")
+      .attr("x", d => x(d[0]))
+      .attr("y", d => y(d[1]))
+      .attr("width", x.bandwidth())
+      .attr("height", d => height - y(d[1]))
+      .attr("fill", "#b81d24")
+      .on("click", (event, d) => {
         const year = d[0];
         const titles = data.filter(x => x.year_added === year).map(x => x.title);
         document.getElementById("detail1").innerHTML =
-            `<strong>Titles added in ${year} (${titles.length}):</strong><br>` +
-            titles.slice(0, 100).join("<br>");
-        });
-
+          `<strong>Titles added in ${year} (${titles.length}):</strong><br>` +
+          titles.slice(0, 100).join("<br>");
+      });
+  
     g.append("text")
-        .attr("x", width / 2)
-        .attr("y", -10)
-        .attr("text-anchor", "middle")
-        .attr("font-size", "18px")
-        .text("Netflix Titles Added Per Year");
+      .attr("x", width / 2)
+      .attr("y", -10)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "18px")
+      .text("Netflix Titles Added Per Year");
 }
   
 function showNewCountriesByYear(data) {
@@ -108,6 +129,8 @@ function showNewCountriesByYear(data) {
         .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 2 === 0)));
 
     g.append("g").call(d3.axisLeft(y));
+
+    addAxisLabels(g, width, height, "Year", "Number of New Countries");
 
     g.selectAll(".bar")
         .data(yearlyNewCountries)
@@ -158,6 +181,8 @@ function showGenreGrowth(data) {
       .call(d3.axisBottom(x).tickValues(years.filter((_, i) => i % 2 === 0)));
   
     g.append("g").call(d3.axisLeft(y));
+  
+    addAxisLabels(g, width, height, "Year", "Number of Unique Genres");
   
     g.selectAll(".bar")
       .data(genreGrowth)
