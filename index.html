@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Netflix's Successful Growth Over the Years</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .slide {
+      display: none;
+    }
+    .slide.active {
+      display: block;
+    }
+    svg {
+      border: 1px solid #ccc;
+    }
+    .bar:hover {
+      opacity: 0.7;
+      cursor: pointer;
+    }
+    .details {
+      margin-top: 16px;
+      font-size: 14px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: #dcdcdc;
+    }
+    button {
+      margin: 5px 10px 20px 0;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #intro {
+      background: #f2f2f2;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #b81d24;
+    }
+    #intro h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Netflix's Successful Growth Over the Years</h1>
+
+<button onclick="showSlide(-1)">Back to Introduction</button>
+<button onclick="showSlide(0)">Slide 1: Titles Added</button>
+<button onclick="showSlide(1)">Slide 2: New Countries</button>
+<button onclick="showSlide(2)">Slide 3: Genre Growth</button>
+
+<div id="intro">
+  <h2>Exploring Netflix's expansion and scale</h2>
+  <p>
+    This visualization explains how Netflix expanded over many domains in the entertainment industry for massive growth:
+  </p>
+  <ul>
+    <li><strong>Slide 1:</strong> Increase in titles added each year.</li>
+    <li><strong>Slide 2:</strong> Netflix's expansion to new countries over the years.</li>
+    <li><strong>Slide 3:</strong> Increasing variety of genres available to watch.</li>
+  </ul>
+  <p>
+    Click through the slides above to explore how Netflix built a worldwide catalog that caters to a global audience.
+  </p>
+</div>
+
+<div id="slide1" class="slide">
+  <svg width="900" height="450"></svg>
+  <div id="detail1" class="details">Click a bar to see titles added that year.</div>
+</div>
+
+<div id="slide2" class="slide">
+  <svg width="900" height="450"></svg>
+  <div id="detail2" class="details">Click a bar to see new countries added that year.</div>
+</div>
+
+<div id="slide3" class="slide">
+  <svg width="900" height="450"></svg>
+  <div id="detail3" class="details">Click a bar to see genres added that year.</div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
